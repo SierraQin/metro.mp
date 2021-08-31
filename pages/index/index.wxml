@@ -34,7 +34,7 @@
 
   <view class="msgDiv" wx:if="{{msgBoxIdx==2}}">
     <text class="msgCapTxt">下载PDF</text>
-    <text class="msgTxt bold" style="padding-bottom: 10rpx;">当前版本：{{mpInfo.mtrVer}}</text>
+    <text class="msgTxt bold" style="padding-bottom: 10rpx;" bindtap="enableCrossHair">当前版本：{{mpInfo.mtrVer}}</text>
     <text class="msgTxt noSpaceTop">点击下方按钮后，请您耐心等候片刻。并在随后弹出的聊天列表中，选择将文件转发给文件传输助手或自己。</text>
     <view class="msgBtnDiv noSpaceTop">
       <text class="msgBtnTxt" bindtap="downloadPdf">{{msgBox2btnTxt}}</text>
@@ -60,4 +60,8 @@
   </view>
 
   <view id="msgBoxCover" style="height: {{avilHeight}}rpx;" bindtap="hideMsgBox"></view>
+</view>
+
+<view class="center" id="crossDiv" wx:if="{{crosshairShow}}">
+  <image id="crossImg" src="{{crosshairB64}}"></image>
 </view>

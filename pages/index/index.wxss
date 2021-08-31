@@ -33,7 +33,7 @@ element {
 
 #sideMenuDiv {
   position: fixed;
-  z-index: 99902;
+  z-index: 99912;
   right: 20rpx;
   top: 160rpx;
   width: 100rpx;
@@ -63,9 +63,9 @@ element {
 
 .msgDiv {
   position: fixed;
-  z-index: 99903;
+  z-index: 99913;
   width: 570rpx;
-  height: 530rpx;
+  height: 520rpx;
   top: 160rpx;
   left: 20rpx;
   border-radius: 10rpx;
@@ -158,10 +158,20 @@ element {
   position: fixed;
   top: 0rpx;
   left: 0rpx;
-  z-index: 99901;
+  z-index: 99911;
   width: 750rpx;
 }
 
+#crossDiv {
+  width: 100rpx;
+  height: 100rpx;
+  z-index: 99901;
+}
+
+#crossImg {
+  width: 100rpx;
+  height: 100rpx;
+}
 
 
 
@@ -173,11 +183,11 @@ element {
   transform: translate(-50%, -50%);
 }
 
-.bold{
+.bold {
   font-weight: bold;
 }
 
-.noSpaceTop{
+.noSpaceTop {
   margin-top: 0rpx;
   padding-top: 0rpx;
 }
