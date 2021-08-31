@@ -1,0 +1,63 @@
+<scroll-view id="scrollDiv" style="height: {{avilHeight}}rpx;" scroll-x="true" scroll-y="true" enhanced="true"
+  model:scroll-top="{{scrollTop}}" model:scroll-left="{{scrollLeft}}" bindscroll="getScrollPos">
+  <image id="mtrSvg" src="{{svgUrl}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;"></image>
+</scroll-view>
+
+
+<view id="zoomBarDiv">
+  <slider id="zoomBar" min="0" max="100" block-size="{{50*rpx2px}}" activeColor="#003380" backgroundColor="#003380"
+    model:value="{{zoomBarVar}}" bindchange="zooming"></slider>
+  <text id="bottomTxt">{ MTR{{mpInfo.mtrVer}}.pdf , {{mpInfo.mtrDate}} , SierraQin , CC BY-SA 4.0 }</text>
+</view>
+
+
+<view id="sideMenuDiv">
+  <view class="sideMenuCard" wx:for="{{sideMenuTxt}}" id="sM-{{index}}" bindtap="sideMenuActions">
+    <image class="sideMenuImg" src="{{iconB64[index]}}"></image>
+    <view class="sideMenuTxt">{{sideMenuTxt[index]}}</view>
+  </view>
+</view>
+
+<view wx:if="{{msgBoxShow}}">
+
+  <view class="msgDiv" wx:if="{{msgBoxIdx==1}}">
+    <text class="msgCapTxt">项目主页</text>
+    <text class="msgTxt">由于平台对个人主体的限制，无法在小程序中直接显示外部网页。请您复制以下内容到浏览器访问项目主页：</text>
+    <input class="msgIpt" value="https://gitee.com/SierraQin/metro"></input>
+    <view class="msgBtnDiv">
+      <text class="msgBtnTxt" bindtap="copyLink">复制到剪贴板</text>
+    </view>
+    <view class="msgBottomDiv">
+      <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>
+    </view>
+  </view>
+
+  <view class="msgDiv" wx:if="{{msgBoxIdx==2}}">
+    <text class="msgCapTxt">下载PDF</text>
+    <text class="msgTxt bold" style="padding-bottom: 10rpx;">当前版本：{{mpInfo.mtrVer}}</text>
+    <text class="msgTxt noSpaceTop">点击下方按钮后，请您耐心等候片刻。并在随后弹出的聊天列表中，选择将文件转发给文件传输助手或自己。</text>
+    <view class="msgBtnDiv noSpaceTop">
+      <text class="msgBtnTxt" bindtap="downloadPdf">{{msgBox2btnTxt}}</text>
+    </view>
+    <text class="msgTxt noSpaceTop">此外，您也可以前往项目主页，通过百度网盘等多种方式手动下载PDF文件。</text>
+    <view class="msgBottomDiv">
+      <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>
+    </view>
+  </view>
+
+  <view class="msgDiv" wx:if="{{msgBoxIdx==3}}">
+    <text class="msgCapTxt">项目说明</text>
+    <text class="msgTxt bold" bindtap="enableAdvShare">[作者] SierraQin 及其他贡献者
+      [版本] {{mpInfo.mtrVer}}　[日期] {{mpInfo.mtrDate}}</text>
+    <view class="msgSubDiv">
+      <text class="msgTxt" style="padding-top: 10rpx;">{{mpInfo.mtrInfo}}</text>
+      <image id="msgBysaImg" src="{{tcosUrl}}img/by-sa.svg"></image>
+      <text class="msgTxt" style="text-align: center;">appVer: {{appVer}} 　appBuild: {{appBuild}}</text>
+    </view>
+    <view class="msgBottomDiv">
+      <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>
+    </view>
+  </view>
+
+  <view id="msgBoxCover" style="height: {{avilHeight}}rpx;" bindtap="hideMsgBox"></view>
+</view>

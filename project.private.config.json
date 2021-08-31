@@ -1,0 +1,24 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "四惠东",
+          "pathName": "pages/index/index",
+          "query": "x=0.47461478568113163&y=0.4914321328859784&v=91",
+          "scene": null
+        }
+      ]
+    }
+  }
+}
