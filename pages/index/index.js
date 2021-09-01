@@ -20,7 +20,7 @@ var prevTop = 0;
 var prevLeft = 0;
 var zoomFlag = false;
 
-var allowDownload = true;
+var allowDownload = false;
 var advShare = false;
 var sharePath = null;
 
@@ -51,7 +51,7 @@ Page({
 
     msgBoxShow: false,
     msgBoxIdx: 0,
-    msgBox2btnTxt: "下载PDF",
+    msgBox2btnTxt: "数据加载中",
 
     crosshairShow: false,
 
@@ -78,6 +78,10 @@ Page({
 
 
   onLoad() {
+    wx.showLoading({
+      title: "数据加载中",
+      mask: true,
+    });
 
     this.getScreenSize();
     this.getInfoJson();
@@ -146,6 +150,9 @@ Page({
       success: function (res) {
         mpInfo = res.data;
         that.setData({ mpInfo });
+        wx.hideLoading({});
+        allowDownload = true;
+        that.setData({ msgBox2btnTxt: "下载PDF" });
       },
     })
   },
@@ -209,7 +216,7 @@ Page({
     currV = this.data.zoomBarVar;
     currX = (prevLeft + pxWidth / 2) / a;
     currY = (prevTop + pxHeight / 2) / a;
-    console.log("[debug] Curr zoom coords:{ x: " + currX + ", y: " + currY + ", z: " + this.data.zoom + ", v: " + currV + " }");
+    console.log('[debug] Curr zoom para: "?x=' + currX + "&y=" + currY + "&v=" + currV + '"');
   },
 
   sideMenuActions: function (evt) {
