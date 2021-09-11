@@ -83,16 +83,16 @@ Page({
       mask: true,
     });
 
-    this.getScreenSize();
-    this.getInfoJson();
 
-    this.setData({
-      svgUrl: tcosUrl + "svg/MTR_latest.svg",
-      tcosUrl,
-    });
+
+    this.getScreenSize();
+    this.pullDataFromCos();
+
+
+
+
 
     wx.setNavigationBarTitle({ title: "列车运行前方", })
-
 
     this.resetZoom();
     this.paraZoom();
@@ -142,17 +142,23 @@ Page({
     })
   },
 
-  getInfoJson() {
+  pullDataFromCos() {
     const that = this;
     wx.request({
       url: tcosUrl + "mpVars/mp.json",
       method: "GET",
       success: function (res) {
         mpInfo = res.data;
-        that.setData({ mpInfo });
+
+        that.setData({
+          mpInfo,
+          msgBox2btnTxt: "下载PDF",
+          svgUrl: tcosUrl + "svg/MTR" + mpInfo.mtrVer + ".svg",
+          tcosUrl,
+        });
+
         wx.hideLoading({});
         allowDownload = true;
-        that.setData({ msgBox2btnTxt: "下载PDF" });
       },
     })
   },
