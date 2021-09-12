@@ -28,7 +28,6 @@ var sharePath = null;
 
 Page({
 
-
   data: {
     rtn: "\n",
 
@@ -42,8 +41,6 @@ Page({
     avilHeight: 0,
     rpx2px: 0,
 
-
-
     zoom: 100,
     zoomBarVar: 0,
     scrollTop: 0,
@@ -55,26 +52,13 @@ Page({
 
     crosshairShow: false,
 
-
     sideMenuTxt: ["重置缩放", "项目主页", "下载PDF", "项目说明"],
 
     iconB64: localData.iconB64,
     crosshairB64: localData.crosshairB64,
     mtrmpInfo:localData.mtrmpInfo,
 
-
-
-
-
-
-
-
-
-
-
-
   },
-
 
 
   onLoad() {
@@ -83,14 +67,8 @@ Page({
       mask: true,
     });
 
-
-
     this.getScreenSize();
     this.pullDataFromCos();
-
-
-
-
 
     wx.setNavigationBarTitle({ title: "列车运行前方", })
 
@@ -113,16 +91,6 @@ Page({
       path: sharePath
     };
   },
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -185,7 +153,6 @@ Page({
       this.zoomTo(str.x, str.y, str.v);
     }
   },
-
 
 
 
@@ -319,8 +286,4 @@ Page({
   },
 
 
-
-
-
-
-})
+});
