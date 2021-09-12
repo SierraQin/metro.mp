@@ -32,8 +32,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.0.1",
-    appBuild: "2",
+    appVer: "1.1.0",
 
 
     svgUrl: null,
@@ -60,8 +59,8 @@ Page({
     sideMenuTxt: ["重置缩放", "项目主页", "下载PDF", "项目说明"],
 
     iconB64: localData.iconB64,
-
     crosshairB64: localData.crosshairB64,
+    mtrmpInfo:localData.mtrmpInfo,
 
 
 
@@ -97,7 +96,6 @@ Page({
 
     this.resetZoom();
     this.paraZoom();
-
   },
 
   onShareAppMessage: function () {
