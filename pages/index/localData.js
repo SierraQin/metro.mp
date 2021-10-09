@@ -3,7 +3,7 @@ const localData = {
 
   crosshairB64: "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48c3ZnIHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgdmlld0JveD0iMCAwIDQ4IDQ4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSI0OCIgaGVpZ2h0PSI0OCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4wMSIvPjxwYXRoIGQ9Ik0yNC4wNjA3IDEwTDI0LjAyNCAzOCIgc3Ryb2tlPSIjMDAzMzgwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xMCAyNEwzOCAyNCIgc3Ryb2tlPSIjMDAzMzgwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPjwvc3ZnPg==",
 
-  mtrmpInfo: '1. 本项目中使用的"北京市轨道交通线路配置图"原作者为SierraQin，该作品基于CC BY-SA 4.0协议进行授权，本项目独立于上述作品，相互之间不存在从属关系\n2. 本项目中含有可能受到商标法保护的内容，作者在本图中使用这些内容不代表对商标持有者的认可，反之亦然\n3. 本项目使用了来自simple-icons的代码，内容进行过修改\n4. 本项目使用了由Icon Park生成的代码，基于Apache Licence 2.0协议进行授权，内容进行过修改\n5. 本项目使用了项目js-base64的发行版，基于BSD-3-Clause License，作者dankogai'
+  mtrmpInfo: '1. 本项目中使用的"北京市轨道交通线路配置图"原作者为SierraQin，该作品基于CC BY-SA 4.0协议进行授权，本小程序独立于上述作品，相互之间不存在从属关系\n2. 本项目中含有可能受到商标法保护的内容，作者在本图中使用这些内容不代表对商标持有者的认可，反之亦然\n3. 本项目使用了来自simple-icons的代码，内容进行过修改\n4. 本项目使用了由Icon Park生成的代码，基于Apache Licence 2.0协议授权，内容进行过修改\n5. 本项目使用了项目js-base64的发行版，基于BSD-3-Clause License协议授权，作者dankogai'
 
 };
 module.exports = {

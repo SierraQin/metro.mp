@@ -177,7 +177,7 @@ Page({
             if (r.data.length > 0) {
               that.setData({
                 showDevChk: true,
-                cmitInfo1: "[" + repoInfoB.sha.slice(0, 7) + "] " + repoInfoB.commit.committer.date.slice(0, 10) + " " + repoInfoB.commit.committer.date.slice(11, 19) + " by " + repoInfoB.commit.committer.name,
+                cmitInfo1: "[ " + repoInfoB.sha.slice(0, 7) + " ] " + repoInfoB.commit.committer.date.slice(0, 10) + " " + repoInfoB.commit.committer.date.slice(11, 19) + " by " + repoInfoB.commit.committer.name,
                 cmitInfo2: repoInfoB.commit.message,
               });
               console.log("[debug] Done!");
