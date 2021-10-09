@@ -112,7 +112,7 @@ Page({
   pullDataFromCos() {
     const that = this;
     wx.request({
-      url: tcosUrl + "mpVars/mp.json",
+      url: tcosUrl + "mpVars/mtr.json",
       method: "GET",
       success: function (res) {
         mpInfo = res.data;
