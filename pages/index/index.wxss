@@ -181,6 +181,33 @@ element {
   height: 100rpx;
 }
 
+#devinfoDiv {
+  width: 500rpx;
+  position: fixed;
+  z-index: 99902;
+  top: 20rpx;
+  left: 50%;
+  transform: translate(-50%, 0);
+  text-align: center;
+  opacity: 0.314159;
+}
+
+.devinfoTxtUp {
+  color: red;
+  font-size: 30rpx;
+}
+
+.devinfoTxtDn {
+  display: block;
+  color: #003380;
+  font-size: 20rpx;
+  text-align: center;
+}
+
+
+
+
+
 
 
 
@@ -200,7 +227,7 @@ element {
   padding-top: 0rpx;
 }
 
-.noMargin{
+.noMargin {
   margin-top: 0rpx;
   margin-bottom: 0rpx;
   padding-top: 0rpx;

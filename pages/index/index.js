@@ -7,8 +7,8 @@ const tcosUrl = "https://metro-1252278458.cos.ap-beijing.myqcloud.com/";
 
 
 var mpInfo = null;
-var gitInfoA = null;
-var gitInfoB = null;
+var repoInfoA = null;
+var repoInfoB = null;
 
 
 var avilHeight = 0;
@@ -31,7 +31,7 @@ var sharePath = null;
 var prodSvg = null;
 var devSvg = null;
 var viewDev = false;
-
+var showDevChkCount = 0;
 
 
 
@@ -68,6 +68,10 @@ Page({
     svgUri: null,
     showDevChk: false,
     currInfo: "{ 加载中... }",
+
+    showCmitInfo: false,
+    cmitInfo1: "",
+    cmitInfo2: "",
 
   },
 
@@ -147,34 +151,39 @@ Page({
               currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
             });
             wx.hideLoading({});
-            that.pullDataFromGitee();
           },
         });
       },
     });
   },
 
-  pullDataFromGitee() {
+  pullDataFromRepo() {
     const that = this;
+    const giteePublicKey = mpInfo.publicKey;
+    const apiUrl = mpInfo.repoApiUrl;
+
     wx.request({
-      url: mpInfo.giteeApiUrl + "/contents/src%2FMTR2.svg",
+      url: apiUrl + "/contents/src%2FMTR2.svg" + "?access_token=" + giteePublicKey,
       method: "GET",
       success: function (res) {
-        gitInfoA = res.data;
+        repoInfoA = res.data;
         devSvg = "data:image/svg+xml;base64," + res.data.content;
 
         wx.request({
-          url: mpInfo.giteeApiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1",
+          url: apiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1" + "&access_token=" + giteePublicKey,
           method: "GET",
           success: function (r) {
-            gitInfoB = r.data[0];
-            that.setData({
-              showDevChk: true,
-            });
-            console.log("[debug] Done!");
+            repoInfoB = r.data[0];
+            if (r.data.length > 0) {
+              that.setData({
+                showDevChk: true,
+                cmitInfo1: "[" + repoInfoB.sha.slice(0, 7) + "] " + repoInfoB.commit.committer.date.slice(0, 10) + " " + repoInfoB.commit.committer.date.slice(11, 19) + " by " + repoInfoB.commit.committer.name,
+                cmitInfo2: repoInfoB.commit.message,
+              });
+              console.log("[debug] Done!");
+            }
           },
         });
-
       },
     });
   },
@@ -255,6 +264,7 @@ Page({
       this.setData({
         msgBoxShow: true,
         msgBoxIdx: idx,
+        viewDev,
       })
     }
   },
@@ -339,20 +349,34 @@ Page({
       title: "切换中",
       mask: true,
     });
+
+    viewDev = this.data.viewDev;
+
     this.setData({ msgBoxShow: false });
+
     if (viewDev) {
       this.setData({
-        svgUri: prodSvg,
-        currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+        svgUri: devSvg,
+        currInfo: "{ dev-" + repoInfoB.sha.slice(0, 7) + " , " + repoInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
+        showCmitInfo: true,
       });
     } else {
       this.setData({
-        svgUri: devSvg,
-        currInfo: "{ dev-" + gitInfoB.sha.slice(0, 7) + " , " + gitInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
+        showCmitInfo: false,
+        svgUri: prodSvg,
+        currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
       });
     }
 
     wx.hideLoading({});
   },
+
+  showDevChk: function (evt) {
+    showDevChkCount++;
+    if (showDevChkCount == 5) {  //确保只请求一次
+      this.pullDataFromRepo();
+    }
+  },
+
 
 });
