@@ -1,13 +1,13 @@
 <scroll-view id="scrollDiv" style="height: {{avilHeight}}rpx;" scroll-x="true" scroll-y="true" enhanced="true"
   model:scroll-top="{{scrollTop}}" model:scroll-left="{{scrollLeft}}" bindscroll="getScrollPos">
-  <image id="mtrSvg" src="{{svgUrl}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;"></image>
+  <image id="mtrSvg" src="{{svgUri}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;"></image>
 </scroll-view>
 
 
 <view id="zoomBarDiv">
   <slider id="zoomBar" min="0" max="100" block-size="{{50*rpx2px}}" activeColor="#003380" backgroundColor="#003380"
     model:value="{{zoomBarVar}}" bindchange="zooming"></slider>
-  <text id="bottomTxt">{ MTR{{mpInfo.mtrVer}}.pdf , {{mpInfo.mtrDate}} , SierraQin , CC BY-SA 4.0 }</text>
+  <text id="bottomTxt">{{currInfo}}</text>
 </view>
 
 
@@ -58,6 +58,7 @@
         列车运行前方 小程序</text>
       <text class="msgTxt noSpaceTop" style="padding-top: 10rpx;">{{mtrmpInfo}}</text>
       <text class="msgTxt" style="text-align: center;">appVer: {{appVer}}</text>
+      <checkbox class="msgChk" wx:if="{{showDevChk}}" model:value="{{viewDev}}" bindtap="devView">显示开发版内容</checkbox>
     </view>
     <view class="msgBottomDiv">
       <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>

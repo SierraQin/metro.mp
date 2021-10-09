@@ -1,15 +1,18 @@
 const app = getApp()
 const localData = require("../../pages/index/localData.js").localData;
 
+const { Base64 } = require('js-base64');
+
 const tcosUrl = "https://metro-1252278458.cos.ap-beijing.myqcloud.com/";
 
 
 var mpInfo = null;
-
+var gitInfoA = null;
+var gitInfoB = null;
 
 
 var avilHeight = 0;
-var avilWidth = 750;
+const avilWidth = 750;
 var pxHeight = 0;
 var pxWidth = 0;
 var rpx2px = 0;
@@ -25,6 +28,12 @@ var allowDownload = false;
 var advShare = false;
 var sharePath = null;
 
+var prodSvg = null;
+var devSvg = null;
+var viewDev = false;
+
+
+
 
 Page({
 
@@ -33,8 +42,6 @@ Page({
 
     appVer: "1.1.0",
 
-
-    svgUrl: null,
     tcosUrl: null,
     mpInfo: null,
 
@@ -56,7 +63,11 @@ Page({
 
     iconB64: localData.iconB64,
     crosshairB64: localData.crosshairB64,
-    mtrmpInfo:localData.mtrmpInfo,
+    mtrmpInfo: localData.mtrmpInfo,
+
+    svgUri: null,
+    showDevChk: false,
+    currInfo: "{ 加载中... }",
 
   },
 
@@ -74,6 +85,7 @@ Page({
 
     this.resetZoom();
     this.paraZoom();
+
   },
 
   onShareAppMessage: function () {
@@ -120,14 +132,51 @@ Page({
         that.setData({
           mpInfo,
           msgBox2btnTxt: "下载PDF",
-          svgUrl: tcosUrl + "svg/MTR" + mpInfo.mtrVer + ".svg",
           tcosUrl,
         });
 
-        wx.hideLoading({});
         allowDownload = true;
+
+        wx.request({
+          url: tcosUrl + "svg/MTR" + mpInfo.mtrVer + ".svg",
+          method: "GET",
+          success: function (r) {
+            prodSvg = "data:image/svg+xml;base64," + Base64.encode(r.data);
+            that.setData({
+              svgUri: prodSvg,
+              currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+            });
+            wx.hideLoading({});
+            that.pullDataFromGitee();
+          },
+        });
       },
-    })
+    });
+  },
+
+  pullDataFromGitee() {
+    const that = this;
+    wx.request({
+      url: mpInfo.giteeApiUrl + "/contents/src%2FMTR2.svg",
+      method: "GET",
+      success: function (res) {
+        gitInfoA = res.data;
+        devSvg = "data:image/svg+xml;base64," + res.data.content;
+
+        wx.request({
+          url: mpInfo.giteeApiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1",
+          method: "GET",
+          success: function (r) {
+            gitInfoB = r.data[0];
+            that.setData({
+              showDevChk: true,
+            });
+            console.log("[debug] Done!");
+          },
+        });
+
+      },
+    });
   },
 
   zoomTo(x, y, v) {
@@ -285,5 +334,25 @@ Page({
     });
   },
 
+  devView: function (evt) {
+    wx.showLoading({
+      title: "切换中",
+      mask: true,
+    });
+    this.setData({ msgBoxShow: false });
+    if (viewDev) {
+      this.setData({
+        svgUri: prodSvg,
+        currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+      });
+    } else {
+      this.setData({
+        svgUri: devSvg,
+        currInfo: "{ dev" + gitInfoB.sha.slice(0, 7) + " , " + gitInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
+      });
+    }
+
+    wx.hideLoading({});
+  },
 
 });

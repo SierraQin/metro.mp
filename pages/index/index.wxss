@@ -91,7 +91,14 @@ element {
   display: block;
   padding: 20rpx;
   font-size: 30rpx;
-  text-align: left;
+  text-align: justify;
+  color: #003380;
+}
+
+.msgChk {
+  display: block;
+  padding: 20rpx;
+  font-size: 30rpx;
   color: #003380;
 }
 
