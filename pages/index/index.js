@@ -348,7 +348,7 @@ Page({
     } else {
       this.setData({
         svgUri: devSvg,
-        currInfo: "{ dev" + gitInfoB.sha.slice(0, 7) + " , " + gitInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
+        currInfo: "{ dev-" + gitInfoB.sha.slice(0, 7) + " , " + gitInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
       });
     }
 
