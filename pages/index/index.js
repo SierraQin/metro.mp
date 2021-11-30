@@ -77,6 +77,8 @@ Page({
 
 
   onLoad() {
+    const that = this;
+
     wx.showLoading({
       title: "数据加载中",
       mask: true,
@@ -90,6 +92,19 @@ Page({
     this.resetZoom();
     this.paraZoom();
 
+    // 问卷弹窗
+
+    this.setData({
+      msgBoxShow: true,
+      msgBoxIdx: 4,
+      viewDev,
+    });
+
+    setTimeout(function () {
+      that.setData({ msgBoxShow: false });
+    }, 10000);
+
+    // End of 问卷弹窗
   },
 
   onShareAppMessage: function () {
@@ -254,7 +269,7 @@ Page({
 
     if (this.data.msgBoxShow && this.data.msgBoxIdx == idx) {
       this.setData({ msgBoxShow: false });
-      return; F
+      return;
     }
 
     if (idx == 0) {

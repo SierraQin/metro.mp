@@ -63,6 +63,22 @@
     </view>
   </view>
 
+  <view class="msgDiv" wx:if="{{msgBoxIdx==4}}">
+    <text class="msgCapTxt">帮助改进这个小程序</text>
+    <text class="msgTxt noSpaceTop"></text>
+    <text class="msgTxt bold" style="padding-bottom: 10rpx;">只需填写一个简短的问卷。</text>
+    <text class="msgTxt noSpaceTop">问卷将包含不超过28个问题，其中的必答题全部为选择题。预计花费时间不超过5分钟。</text>
+    <view class="msgBtnDiv">
+      <text class="msgBtnTxt" bindtap="hideMsgBox">不，跳过</text>
+    </view>
+    <navigator class="msgTxt noSpaceTop" target="miniProgram" open-type="navigate" app-id="wxebadf544ddae62cb" path="pages/survey/index?sid=9384257&hash=48fa" version="release" style="text-align: center;text-decoration: underline;">
+      好的，我们来填写这个问卷...
+    </navigator>
+    <view class="msgBottomDiv">
+      <text class="msgBottomTxt">[ 点击其他空白区域跳过 ]</text>
+    </view>
+  </view>
+
   <view id="msgBoxCover" style="height: {{avilHeight}}rpx;" bindtap="hideMsgBox"></view>
 </view>
 
