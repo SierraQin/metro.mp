@@ -287,6 +287,7 @@ Page({
     if (idx == 0) {
       this.setData({ msgBoxShow: false });
       this.resetZoom();
+      this.resetZoom();
     } else if (idx == 3) {
       this.mtrDevLazyLoad();
       this.setData({
