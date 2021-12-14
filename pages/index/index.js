@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.2.0.b3",
+    appVer: "1.2.0.b4",
 
     tcosUrl: null,
     mpInfo: null,
@@ -396,18 +396,19 @@ Page({
     }
   },
 
+
+  
   touchStartEvt: function (evt) {
     if (evt.touches.length != 2) {
       return;
     }
 
-    var coord = this.scrPos2Coord(z_px_x, z_px_y);
     z_initZoom = this.data.zoom;
-    z_initDist = this.calcDist(evt);
+    z_initDist = Math.sqrt((evt.touches[0].pageX - evt.touches[1].pageX) * (evt.touches[0].pageX - evt.touches[1].pageX) + (evt.touches[0].pageY - evt.touches[1].pageY) * (evt.touches[0].pageY - evt.touches[1].pageY));
     z_px_x = (evt.touches[0].clientX + evt.touches[1].clientX) / 2;
     z_px_y = (evt.touches[0].clientY + evt.touches[1].clientY) / 2;
-    z_x = coord[0];
-    z_y = coord[1];
+    z_x = (prevLeft + z_px_x) / (rpx2px * this.data.zoom * 750);
+    z_y = (prevTop + z_px_y) / (rpx2px * this.data.zoom * 750);
   },
 
   touchMoveEvt: function (evt) {
@@ -415,7 +416,7 @@ Page({
       return;
     }
 
-    var dist = this.calcDist(evt);
+    var dist = Math.sqrt((evt.touches[0].pageX - evt.touches[1].pageX) * (evt.touches[0].pageX - evt.touches[1].pageX) + (evt.touches[0].pageY - evt.touches[1].pageY) * (evt.touches[0].pageY - evt.touches[1].pageY));
     var A = 750 * z_initZoom * dist / z_initDist * rpx2px;
     this.setData({
       zoom: z_initZoom * dist / z_initDist,
@@ -424,17 +425,6 @@ Page({
     });
   },
 
-  scrPos2Coord(x, y) {
-    var coord = [0, 0];
-    coord[0] = (prevLeft + x) / (rpx2px * this.data.zoom * 750);
-    coord[1] = (prevTop + y) / (rpx2px * this.data.zoom * 750);
-    return coord;
-  },
 
-  calcDist(e) {
-    var dx = e.touches[0].pageX - e.touches[1].pageX;
-    var dy = e.touches[0].pageY - e.touches[1].pageY;
-    return Math.sqrt(dx * dx + dy * dy);
-  },
 
 });
