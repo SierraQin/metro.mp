@@ -1,5 +1,5 @@
 <scroll-view id="scrollDiv" style="height: {{avilHeight}}rpx;" scroll-x="true" scroll-y="true" enhanced="true" model:scroll-top="{{scrollTop}}" model:scroll-left="{{scrollLeft}}" bindscroll="getScrollPos">
-  <image id="mtrSvg" src="{{svgUri}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;"></image>
+  <image id="mtrSvg" src="{{svgUri}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;" bindtouchstart="touchStartEvt" bindtouchmove="touchMoveEvt"></image>
 </scroll-view>
 
 

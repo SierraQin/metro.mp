@@ -24,6 +24,16 @@ var prevTop = 0;
 var prevLeft = 0;
 var zoomFlag = false;
 
+
+
+var z_initZoom = 0;
+var z_initDist = 0;
+var z_x = 0;
+var z_y = 0;
+var z_px_x = 0;
+var z_px_y = 0;
+
+
 var allowDownload = false;
 var advShare = false;
 var sharePath = null;
@@ -40,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.1.0",
+    appVer: "1.2.0",
 
     tcosUrl: null,
     mpInfo: null,
@@ -79,53 +89,13 @@ Page({
   onLoad() {
     const that = this;
 
+    wx.setNavigationBarTitle({ title: "列车运行前方", });
+
     wx.showLoading({
       title: "数据加载中",
       mask: true,
     });
 
-    this.getScreenSize();
-    this.pullDataFromCos();
-
-    wx.setNavigationBarTitle({ title: "列车运行前方", })
-
-    this.resetZoom();
-    this.paraZoom();
-
-    // 问卷弹窗
-
-    this.setData({
-      msgBoxShow: true,
-      msgBoxIdx: 4,
-      viewDev,
-    });
-
-    setTimeout(function () {
-      that.setData({ msgBoxShow: false });
-    }, 10000);
-
-    // End of 问卷弹窗
-  },
-
-  onShareAppMessage: function () {
-    if (advShare) {
-      sharePath = "/pages/index/index?x=" + currX + "&y=" + currY + "&v=" + currV;
-      advShare = false;
-    } else {
-      sharePath = "/pages/index/index";
-    }
-
-    return {
-      title: "北京轨道交通线路配置图",
-      desc: "版本" + mpInfo.mtrVer,
-      imageUrl: tcosUrl + "img/mpShare.png",
-      path: sharePath
-    };
-  },
-
-
-
-  getScreenSize() {
     wx.getSystemInfo({
       success: (info) => {
         pxHeight = info.windowHeight;
@@ -137,11 +107,8 @@ Page({
           rpx2px,
         });
       },
-    })
-  },
+    });
 
-  pullDataFromCos() {
-    const that = this;
     wx.request({
       url: tcosUrl + "mpVars/mtr.json",
       method: "GET",
@@ -166,11 +133,44 @@ Page({
               currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
             });
             wx.hideLoading({});
+
+            // 问卷弹窗
+            that.setData({
+              msgBoxShow: true,
+              msgBoxIdx: 4,
+              viewDev,
+            });
+            setTimeout(function () {
+              that.setData({ msgBoxShow: false });
+            }, 10000);
+            // End of 问卷弹窗
+
+            that.resetZoom();
+            that.paraZoom();
           },
         });
       },
     });
+
   },
+
+  onShareAppMessage: function () {
+    if (advShare) {
+      sharePath = "/pages/index/index?x=" + currX + "&y=" + currY + "&v=" + currV;
+      advShare = false;
+    } else {
+      sharePath = "/pages/index/index";
+    }
+
+    return {
+      title: "北京轨道交通线路配置图",
+      desc: "版本" + mpInfo.mtrVer,
+      imageUrl: tcosUrl + "img/mpShare.png",
+      path: sharePath
+    };
+  },
+
+
 
   pullDataFromRepo() {
     const that = this;
@@ -393,5 +393,45 @@ Page({
     }
   },
 
+  touchStartEvt: function (evt) {
+    if (evt.touches.length != 2) {
+      return;
+    }
+
+    var coord = this.scrPos2Coord(z_px_x, z_px_y);
+    z_initZoom = this.data.zoom;
+    z_initDist = this.calcDist(evt);
+    z_px_x = (evt.touches[0].clientX + evt.touches[1].clientX) / 2;
+    z_px_y = (evt.touches[0].clientY + evt.touches[1].clientY) / 2;
+    z_x = coord[0];
+    z_y = coord[1];
+  },
+
+  touchMoveEvt: function (evt) {
+    if (evt.touches.length != 2) {
+      return;
+    }
+
+    var dist = this.calcDist(evt);
+    var A = 750 * z_initZoom * dist / z_initDist * rpx2px;
+    this.setData({
+      zoom: z_initZoom * dist / z_initDist,
+      scrollTop: z_y * A - z_px_y,
+      scrollLeft: z_x * A - z_px_x,
+    });
+  },
+
+  scrPos2Coord(x, y) {
+    var coord = [0, 0];
+    coord[0] = (prevLeft + x) / (rpx2px * this.data.zoom * 750);
+    coord[1] = (prevTop + y) / (rpx2px * this.data.zoom * 750);
+    return coord;
+  },
+
+  calcDist(e) {
+    var dx = e.touches[0].pageX - e.touches[1].pageX;
+    var dy = e.touches[0].pageY - e.touches[1].pageY;
+    return Math.sqrt(dx * dx + dy * dy);
+  },
 
 });
