@@ -105,11 +105,11 @@ element {
 .msgIpt {
   margin: 10rpx;
   padding: 10rpx;
-  width: 530rpx;
-  font-size: 30rpx;
+  width: 490rpx;
+  font-size: 28rpx;
   text-align: center;
   color: #003380;
-  background-color: lightgrey;
+  background-color: white;
 }
 
 .msgBtnDiv {

@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.2.0",
+    appVer: "1.2.0.b3",
 
     tcosUrl: null,
     mpInfo: null,
@@ -69,11 +69,12 @@ Page({
 
     crosshairShow: false,
 
-    sideMenuTxt: ["重置缩放", "项目主页", "下载PDF", "项目说明"],
+    sideMenuTxt: ["重置缩放", "项目说明", "下载PDF", "预览版"],
 
     iconB64: localData.iconB64,
     crosshairB64: localData.crosshairB64,
     mtrmpInfo: localData.mtrmpInfo,
+    privacyInfo: localData.privacyInfo,
 
     svgUri: null,
     showDevChk: false,
@@ -130,20 +131,22 @@ Page({
             prodSvg = "data:image/svg+xml;base64," + Base64.encode(r.data);
             that.setData({
               svgUri: prodSvg,
-              currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+              currInfo: "{ MTR" + mpInfo.mtrVer + ".svg , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
             });
             wx.hideLoading({});
 
-            // 问卷弹窗
+            // 弹窗
             that.setData({
               msgBoxShow: true,
               msgBoxIdx: 4,
               viewDev,
             });
             setTimeout(function () {
-              that.setData({ msgBoxShow: false });
+              if (that.data.msgBoxShow && that.data.msgBoxIdx == 4) {
+                that.setData({ msgBoxShow: false });
+              }
             }, 10000);
-            // End of 问卷弹窗
+            // End of 弹窗
 
             that.resetZoom();
             that.paraZoom();
