@@ -1,11 +1,11 @@
 <scroll-view id="scrollDiv" style="height: {{avilHeight}}rpx;" scroll-x="true" scroll-y="true" enhanced="true" model:scroll-top="{{scrollTop}}" model:scroll-left="{{scrollLeft}}" bindscroll="getScrollPos">
-  <image id="mtrSvg" src="{{svgUri}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;" bindtouchstart="touchStartEvt" bindtouchmove="touchMoveEvt"></image>
+  <image id="mtrSvg" src="{{svgUri}}" style="width: {{750*zoom}}rpx; height: {{750*zoom}}rpx;" bindtouchstart="touchStartEvt" bindtouchmove="touchMoveEvt" bindtouchend="touchEndEvt"></image>
 </scroll-view>
 
 
 <view id="zoomBarDiv">
   <slider id="zoomBar" min="0" max="100" block-size="{{50*rpx2px}}" activeColor="#003380" backgroundColor="#003380" model:value="{{zoomBarVar}}" bindchange="zooming"></slider>
-  <text id="bottomTxt">{{currInfo}}</text>
+  <text id="bottomTxt" bindtap="enableCrossHair">{{currInfo}}</text>
 </view>
 
 
@@ -38,20 +38,25 @@
       <image id="msgBysaImg" src="{{tcosUrl}}img/by-sa.svg"></image>
       <text class="msgCapTxt"> </text>
 
-      <text class="msgCapTxt" bindtap="enableCrossHair">列车运行前方 小程序</text>
+      <text class="msgCapTxt">列车运行前方 小程序</text>
       <text class="msgTxt noSpaceTop" style="padding-top: 10rpx;">{{mtrmpInfo}}</text>
 
       <text class="msgCapTxt">隐私及数据说明</text>
       <text class="msgTxt noSpaceTop" style="padding-top: 10rpx;">{{privacyInfo}}</text>
 
-      <text class="msgTxt" style="text-align: center;" bindtap="showDevChk">appVer: {{appVer}}</text>
-      <checkbox class="msgChk" wx:if="{{showDevChk}}" model:checked="{{viewDev}}" bindtap="devView">显示开发版内容</checkbox>
+      <text class="msgCapTxt">联系作者</text>
+      <text class="msgTxt bold noMargin" style="padding-top: 20rpx;">配线图作者：SierraQin</text>
+      <text class="msgTxt noMargin">QQ：6468085\n微博：@SierraQin\n邮件：sierra@qinxr.cn\n随时准备倾听您的意见和建议\n当然也欢迎闲聊 :-)</text>
+      <text class="msgTxt bold noMargin" style="padding-top: 20rpx;">小程序作者：SierraQin</text>
+      <text class="msgTxt noMargin">嗯，还是我</text>
+
+      <text class="msgTxt" style="text-align: center;" bindtap="somethingFun">appVer: {{appVer}}</text>
     </view>
     <view class="msgBottomDiv">
       <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>
     </view>
   </view>
-  
+
   <view class="msgDiv" wx:if="{{msgBoxIdx==2}}">
     <text class="msgCapTxt">下载PDF</text>
     <text class="msgTxt bold" style="padding-bottom: 10rpx;">当前版本：{{mpInfo.mtrVer}}</text>
@@ -60,6 +65,16 @@
       <text class="msgBtnTxt" bindtap="downloadPdf">{{msgBox2btnTxt}}</text>
     </view>
     <text class="msgTxt noSpaceTop">此外，您也可以前往项目主页，通过百度网盘等多种方式手动下载PDF文件。</text>
+    <view class="msgBottomDiv">
+      <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>
+    </view>
+  </view>
+
+  <view class="msgDiv" wx:if="{{msgBoxIdx==3}}">
+    <text class="msgCapTxt">查看开发版配线图</text>
+    <text class="msgTxt bold" style="padding-bottom: 10rpx;">当前版本：{{cmitHash}}</text>
+    <text class="msgTxt noSpaceTop">开发版中一般会存在临时性或过程性内容，同时部分正式版内容也可能会被暂时隐藏。开发版不代表下个正式版本的最终效果，并可能会与正式版的内容和样式存在较大的差异。</text>
+    <checkbox class="msgChk" disabled="{{!enableDev}}" model:checked="{{viewDev}}" bindtap="devView">显示开发版内容</checkbox>
     <view class="msgBottomDiv">
       <text class="msgBottomTxt">[ 点击其他空白区域返回 ]</text>
     </view>
@@ -89,7 +104,7 @@
 </view>
 
 <view wx:if="{{showCmitInfo}}" id="devinfoDiv">
-  <text class="devinfoTxtUp bold">{{"您正查看的是开发预览版本\n不代表正式发行版最终效果"}}</text>
+  <text class="devinfoTxtUp bold">{{"您正查看的是开发版本\n不代表正式发行版最终效果"}}</text>
   <text class="devinfoTxtDn">{{cmitInfo1}}</text>
   <text class="devinfoTxtDn">{{cmitInfo2}}</text>
 </view>

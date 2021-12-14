@@ -23,6 +23,7 @@ var currV = 0;
 var prevTop = 0;
 var prevLeft = 0;
 var zoomFlag = false;
+var tZoomFlag = false;
 
 
 
@@ -40,8 +41,7 @@ var sharePath = null;
 
 var prodSvg = null;
 var devSvg = null;
-var viewDev = false;
-var showDevChkCount = 0;
+var funMeter = 0;
 
 
 
@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.2.0.b4",
+    appVer: "1.2.0.b9",
 
     tcosUrl: null,
     mpInfo: null,
@@ -77,12 +77,14 @@ Page({
     privacyInfo: localData.privacyInfo,
 
     svgUri: null,
-    showDevChk: false,
+    enableDev: false,
+    viewDev: false,
     currInfo: "{ 加载中... }",
 
     showCmitInfo: false,
     cmitInfo1: "",
     cmitInfo2: "",
+    cmitHash: "加载中...",
 
   },
 
@@ -139,7 +141,6 @@ Page({
             that.setData({
               msgBoxShow: true,
               msgBoxIdx: 4,
-              viewDev,
             });
             setTimeout(function () {
               if (that.data.msgBoxShow && that.data.msgBoxIdx == 4) {
@@ -173,19 +174,21 @@ Page({
     };
   },
 
+  mtrDevLazyLoad() {
+    if (this.data.enableDev) {
+      return;
+    }
 
-
-  pullDataFromRepo() {
     const that = this;
     const giteePublicKey = mpInfo.publicKey;
     const apiUrl = mpInfo.repoApiUrl;
 
+
     wx.request({
-      url: apiUrl + "/contents/src%2FMTR2.svg" + "?access_token=" + giteePublicKey,
+      url: "https://mtr.qinxr.cn/src/MTR2.svg",
       method: "GET",
       success: function (res) {
-        repoInfoA = res.data;
-        devSvg = "data:image/svg+xml;base64," + res.data.content;
+        devSvg = "data:image/svg+xml;base64," + Base64.encode(res.data);
 
         wx.request({
           url: apiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1" + "&access_token=" + giteePublicKey,
@@ -194,7 +197,8 @@ Page({
             repoInfoB = r.data[0];
             if (r.data.length > 0) {
               that.setData({
-                showDevChk: true,
+                cmitHash: "dev-" + repoInfoB.sha.slice(0, 7),
+                enableDev: true,
                 cmitInfo1: "[ " + repoInfoB.sha.slice(0, 7) + " ] " + repoInfoB.commit.committer.date.slice(0, 10) + " " + repoInfoB.commit.committer.date.slice(11, 19) + " by " + repoInfoB.commit.committer.name,
                 cmitInfo2: repoInfoB.commit.message,
               });
@@ -202,9 +206,14 @@ Page({
             }
           },
         });
+
+
       },
     });
+
   },
+
+
 
   zoomTo(x, y, v) {
     var a = 750 * Math.pow(10, v / 50) * rpx2px;
@@ -278,11 +287,16 @@ Page({
     if (idx == 0) {
       this.setData({ msgBoxShow: false });
       this.resetZoom();
+    } else if (idx == 3) {
+      this.mtrDevLazyLoad();
+      this.setData({
+        msgBoxShow: true,
+        msgBoxIdx: idx,
+      })
     } else if (idx < 4) {
       this.setData({
         msgBoxShow: true,
         msgBoxIdx: idx,
-        viewDev,
       })
     }
   },
@@ -368,11 +382,9 @@ Page({
       mask: true,
     });
 
-    viewDev = this.data.viewDev;
-
     this.setData({ msgBoxShow: false });
 
-    if (viewDev) {
+    if (this.data.viewDev) {
       this.setData({
         svgUri: devSvg,
         currInfo: "{ dev-" + repoInfoB.sha.slice(0, 7) + " , " + repoInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
@@ -380,24 +392,18 @@ Page({
       });
     } else {
       this.setData({
-        showCmitInfo: false,
         svgUri: prodSvg,
         currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+        showCmitInfo: false,
       });
     }
 
     wx.hideLoading({});
   },
 
-  showDevChk: function (evt) {
-    showDevChkCount++;
-    if (showDevChkCount == 5) {  //确保只请求一次
-      this.pullDataFromRepo();
-    }
-  },
 
 
-  
+
   touchStartEvt: function (evt) {
     if (evt.touches.length != 2) {
       return;
@@ -418,13 +424,57 @@ Page({
 
     var dist = Math.sqrt((evt.touches[0].pageX - evt.touches[1].pageX) * (evt.touches[0].pageX - evt.touches[1].pageX) + (evt.touches[0].pageY - evt.touches[1].pageY) * (evt.touches[0].pageY - evt.touches[1].pageY));
     var A = 750 * z_initZoom * dist / z_initDist * rpx2px;
+
+    var newZoom = z_initZoom * dist / z_initDist;
+    if (newZoom >= 100 || newZoom < 1) {
+      return;
+    }
+
     this.setData({
-      zoom: z_initZoom * dist / z_initDist,
+      zoom: newZoom,
       scrollTop: z_y * A - z_px_y,
       scrollLeft: z_x * A - z_px_x,
     });
+
+    tZoomFlag = true;
   },
 
+  touchEndEvt: function (evt) {
+    if (!tZoomFlag) {
+      return;
+    }
 
+    this.setData({ zoomBarVar: Math.log10(this.data.zoom) * 50 });
+
+    /* 
+        var a = 750 * this.data.zoom * rpx2px;
+        prevTop = this.data.scrollLeft;
+        prevLeft = this.data.scrollTop;
+        currV = Math.log10(this.data.zoom) * 50;
+        this.setData({ zoomBarVar: currV });
+        currX = (prevLeft + pxWidth / 2) / a;
+        currY = (prevTop + pxHeight / 2) / a;
+        console.log('[debug] Curr zoom* para: "?x=' + currX + "&y=" + currY + "&v=" + currV + '"');
+     */
+
+  },
+
+  somethingFun: function (evt) {
+    funMeter++;
+    if (funMeter == 5) {
+      wx.showToast({
+        title: "已经没有彩蛋啦",
+        icon: "error",
+        duration: 3000
+      })
+    } else if (funMeter == 20) {
+      wx.showToast({
+        title: "试试点击底部版本号",
+        icon: "none",
+        duration: 3000
+      })
+    }
+
+  },
 
 });
