@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.2.0.b9",
+    appVer: "1.2.0",
 
     tcosUrl: null,
     mpInfo: null,
@@ -357,7 +357,7 @@ Page({
 
   enableAdvShare: function (evt) {
     wx.showToast({
-      title: "下一次分享小程序时将会附带当前显示位置和缩放等级信息",
+      title: "下次分享将附带当前显示位置和缩放",
       icon: "none",
       duration: 3000,
     });
@@ -367,13 +367,8 @@ Page({
 
   enableCrossHair: function (evt) {
     this.setData({
-      crosshairShow: true,
+      crosshairShow: !this.data.crosshairShow,
       msgBoxShow: false,
-    });
-    wx.showToast({
-      title: "已显示十字准心",
-      icon: "none",
-      duration: 3000,
     });
   },
 
@@ -394,7 +389,7 @@ Page({
     } else {
       this.setData({
         svgUri: prodSvg,
-        currInfo: "{ MTR" + mpInfo.mtrVer + ".pdf , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+        currInfo: "{ MTR" + mpInfo.mtrVer + ".svg , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
         showCmitInfo: false,
       });
     }
@@ -472,6 +467,18 @@ Page({
       wx.showToast({
         title: "试试点击底部版本号",
         icon: "none",
+        duration: 3000
+      })
+    } else if (funMeter == 40) {
+      wx.showToast({
+        title: "试试点击隐私及数据说明",
+        icon: "none",
+        duration: 3000
+      })
+    } else if (funMeter > 50) {
+      wx.showToast({
+        title: "别点啦，这次真没啦",
+        icon: "error",
         duration: 3000
       })
     }

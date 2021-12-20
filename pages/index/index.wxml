@@ -22,8 +22,9 @@
     <text class="msgCapTxt">项目说明</text>
     <view class="msgSubDiv">
 
-      <text class="msgCapTxt">北京市轨道交通线路配置图\n项目主页</text>
-      <text class="msgTxt noMargin">由于平台对个人主体的限制，无法在小程序中直接显示外部网页。请您复制以下内容到浏览器访问项目主页：</text>
+      <text class="msgCapTxt">配线图 项目主页</text>
+      <text class="msgTxt noMargin">项目主页提供配线图的完整说明、历史修改记录、使用指南、PDF直接下载、完整源文件等内容。</text>
+      <text class="msgTxt noMargin" style="padding-top: 10rpx;">复制链接到浏览器访问项目主页：</text>
       <input class="msgIpt" value="https://gitee.com/SierraQin/metro"></input>
       <view class="msgBtnDiv">
         <text class="msgBtnTxt" bindtap="copyLink">复制到剪贴板</text>
@@ -31,7 +32,7 @@
       <text class="msgCapTxt"></text>
 
       <text class="msgCapTxt">北京市轨道交通线路配置图</text>
-      <text class="msgTxt bold noMargin" bindtap="enableAdvShare">[作者] SierraQin 及其他贡献者
+      <text class="msgTxt bold noMargin">[作者] SierraQin 及其他贡献者
         [版本] {{mpInfo.mtrVer}}
         [日期] {{mpInfo.mtrDate}}</text>
       <text class="msgTxt noSpaceTop" style="padding-top: 10rpx;">{{mpInfo.mtrInfo}}</text>
@@ -41,7 +42,7 @@
       <text class="msgCapTxt">列车运行前方 小程序</text>
       <text class="msgTxt noSpaceTop" style="padding-top: 10rpx;">{{mtrmpInfo}}</text>
 
-      <text class="msgCapTxt">隐私及数据说明</text>
+      <text class="msgCapTxt" bindtap="enableAdvShare">隐私及数据说明</text>
       <text class="msgTxt noSpaceTop" style="padding-top: 10rpx;">{{privacyInfo}}</text>
 
       <text class="msgCapTxt">联系作者</text>
@@ -81,18 +82,16 @@
   </view>
 
   <view class="msgDiv" wx:if="{{msgBoxIdx==4}}">
-    <text class="msgCapTxt">帮助改进这个小程序</text>
-    <text class="msgTxt noSpaceTop"></text>
-    <text class="msgTxt bold" style="padding-bottom: 10rpx;">只需填写一个简短的问卷。</text>
-    <text class="msgTxt noSpaceTop">问卷将包含不超过28个问题，其中的必答题全部为选择题。预计花费时间不超过5分钟。</text>
-    <view class="msgBtnDiv">
-      <text class="msgBtnTxt" bindtap="hideMsgBox">不，跳过</text>
-    </view>
+    <text class="msgCapTxt">现已支持双指缩放</text>
+    <text class="msgTxt">由于小程序运行环境原因，缩放时会发生不同程度的卡顿掉帧，但作者将不断尝试对此进行优化。</text>
+    <text class="msgCapTxt noMargin"></text>
+    <text class="msgCapTxt">帮助改善在线看图功能</text>
+    <text class="msgTxt noMargin" style="padding-top: 15rpx;">诚邀您参加本次专项问卷调研。</text>
     <navigator class="msgTxt noSpaceTop" target="miniProgram" open-type="navigate" app-id="wxebadf544ddae62cb" path="pages/survey/index?sid=9384257&hash=48fa" version="release" style="text-align: center;text-decoration: underline;">
-      好的，我们来填写这个问卷...
+      点我填写问卷
     </navigator>
     <view class="msgBottomDiv">
-      <text class="msgBottomTxt">[ 点击其他空白区域跳过 ]</text>
+      <text class="msgBottomTxt">[ 点击其他空白区域关闭 ]</text>
     </view>
   </view>
 
