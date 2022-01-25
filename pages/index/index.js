@@ -345,7 +345,7 @@ Page({
       success(res) {
         allowDownload = false;
         that.setData({ msgBox2btnTxt: "已下载" });
-        fsm.copyFileSync(res.tempFilePath, wx.env.USER_DATA_PATH + "/MTR" + mpInfo.mtrVer + ".pdf");
+        fsm.copyFileSync(res.tempFilePath, wx.env.USER_DATA_PATH + "/" + fileName);
         wx.shareFileMessage({
           filePath: wx.env.USER_DATA_PATH + "/" + fileName,
           fileName: fileName,
