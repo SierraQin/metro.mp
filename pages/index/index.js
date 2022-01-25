@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.2.0",
+    appVer: "1.2.1",
 
     tcosUrl: null,
     mpInfo: null,
@@ -69,7 +69,7 @@ Page({
 
     crosshairShow: false,
 
-    sideMenuTxt: ["重置缩放", "项目说明", "下载PDF", "预览版"],
+    sideMenuTxt: ["重置缩放", "项目说明", "下载PDF", "开发预览"],
 
     iconB64: localData.iconB64,
     crosshairB64: localData.crosshairB64,
@@ -79,6 +79,7 @@ Page({
     svgUri: null,
     enableDev: false,
     viewDev: false,
+    pdfVer: "加载中...",
     currInfo: "{ 加载中... }",
 
     showCmitInfo: false,
@@ -148,6 +149,8 @@ Page({
               }
             }, 10000);
             // End of 弹窗
+
+            that.setData({ pdfVer: that.data.mpInfo.mtrVer });
 
             that.resetZoom();
             that.paraZoom();
@@ -325,15 +328,27 @@ Page({
 
     const fsm = wx.getFileSystemManager();
 
+    var fileName = ""
+    var pdfUrl = ""
+
+    if (this.data.viewDev) {
+      var cDate = repoInfoB.commit.committer.date;
+      fileName = "MTR" + cDate.slice(2, 4) + cDate.slice(5, 7) + cDate.slice(8, 10) + "_" + this.data.pdfVer + ".pdf"
+      pdfUrl = "https://mtr.qinxr.cn/build/" + fileName;
+    } else {
+      fileName = "MTR" + mpInfo.mtrVer + ".pdf"
+      pdfUrl = tcosUrl + "MTR/" + fileName;
+    }
+
     wx.downloadFile({
-      url: tcosUrl + "MTR/MTR" + mpInfo.mtrVer + ".pdf",
+      url: pdfUrl,
       success(res) {
         allowDownload = false;
         that.setData({ msgBox2btnTxt: "已下载" });
         fsm.copyFileSync(res.tempFilePath, wx.env.USER_DATA_PATH + "/MTR" + mpInfo.mtrVer + ".pdf");
         wx.shareFileMessage({
-          filePath: wx.env.USER_DATA_PATH + "/MTR" + mpInfo.mtrVer + ".pdf",
-          fileName: "MTR" + mpInfo.mtrVer + ".pdf",
+          filePath: wx.env.USER_DATA_PATH + "/" + fileName,
+          fileName: fileName,
           fail: function () {
             allowDownload = true;
             that.setData({ msgBox2btnTxt: "下载PDF" });
@@ -378,18 +393,25 @@ Page({
       mask: true,
     });
 
+    allowDownload = true;
+    this.setData({ msgBox2btnTxt: "下载PDF" });
+
     this.setData({ msgBoxShow: false });
 
     if (this.data.viewDev) {
+      var cDate = repoInfoB.commit.committer.date;
       this.setData({
         svgUri: devSvg,
         currInfo: "{ dev-" + repoInfoB.sha.slice(0, 7) + " , " + repoInfoB.commit.committer.date.slice(0, 10) + " , SierraQin , CC BY-SA 4.0 }",
+        //pdfVer: cDate.slice(2, 4) + cDate.slice(5, 7) + cDate.slice(8, 10) + "_dev-" + repoInfoB.sha.slice(0, 7),
+        pdfVer: "dev-" + repoInfoB.sha.slice(0, 7),
         showCmitInfo: true,
       });
     } else {
       this.setData({
         svgUri: prodSvg,
         currInfo: "{ MTR" + mpInfo.mtrVer + ".svg , " + mpInfo.mtrDate + " , SierraQin , CC BY-SA 4.0 }",
+        pdfVer: this.data.mpInfo.mtrVer,
         showCmitInfo: false,
       });
     }
