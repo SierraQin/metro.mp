@@ -193,10 +193,12 @@ Page({
       success: function (res) {
         devSvg = "data:image/svg+xml;base64," + Base64.encode(res.data);
 
+        console.log(111)
         wx.request({
-          url: apiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1" + "&access_token=" + giteePublicKey,
+          url: apiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1" + "&access_token=" + giteePublicKey+"&rand=1",
           method: "GET",
           success: function (r) {
+            console.log(222)
             repoInfoB = r.data[0];
             if (r.data.length > 0) {
               that.setData({
