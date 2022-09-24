@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.3.0",
+    appVer: "1.3.1",
 
     tcosUrl: null,
     mpInfo: null,
@@ -184,7 +184,7 @@ Page({
 
     const that = this;
     // const giteePublicKey = mpInfo.publicKey;
-    const apiUrl = mpInfo.repoApiUrl;
+    const apiUrl = "https://api.qinxr.cn/gh/metro/v1/getCommitsInfo";
 
 
     wx.request({
@@ -194,7 +194,7 @@ Page({
         devSvg = "data:image/svg+xml;base64," + Base64.encode(res.data);
 
         wx.request({
-          url: apiUrl + "/commits?path=src%2FMTR2.svg",
+          url: apiUrl,
           method: "GET",
           success: function (r) {
             repoInfoB = r.data[0];
