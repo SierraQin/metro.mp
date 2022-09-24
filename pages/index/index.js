@@ -50,7 +50,7 @@ Page({
   data: {
     rtn: "\n",
 
-    appVer: "1.2.1",
+    appVer: "1.3.0",
 
     tcosUrl: null,
     mpInfo: null,
@@ -183,7 +183,7 @@ Page({
     }
 
     const that = this;
-    const giteePublicKey = mpInfo.publicKey;
+    // const giteePublicKey = mpInfo.publicKey;
     const apiUrl = mpInfo.repoApiUrl;
 
 
@@ -193,12 +193,10 @@ Page({
       success: function (res) {
         devSvg = "data:image/svg+xml;base64," + Base64.encode(res.data);
 
-        console.log(111)
         wx.request({
-          url: apiUrl + "/commits?path=src%2FMTR2.svg&page=1&per_page=1" + "&access_token=" + giteePublicKey+"&rand=1",
+          url: apiUrl + "/commits?path=src%2FMTR2.svg",
           method: "GET",
           success: function (r) {
-            console.log(222)
             repoInfoB = r.data[0];
             if (r.data.length > 0) {
               that.setData({
