@@ -307,7 +307,7 @@ Page({
 
   copyLink: function (evt) {
     wx.setClipboardData({
-      data: "https://gitee.com/SierraQin/metro",
+      data: "https://github.com/SierraQin/metro",
     });
   },
 
